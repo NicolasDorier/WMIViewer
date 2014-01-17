@@ -47,6 +47,9 @@
       <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.rtf" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
     <GetRegex File="../WMIViewer/Properties/AssemblyInfo.cs" Regex="AssemblyVersion\(&quot;(.*?)&quot;\)" Group="1">

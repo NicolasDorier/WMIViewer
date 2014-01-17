@@ -25,8 +25,8 @@
 			<ComponentRef Id="Shortcut"/>
 			<ComponentRef Id="ApplicationShortcut"/>
 		</Feature>
-		
 
+		<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 		<Property Id="EXITDIALOGOPTIONALCHECKBOX" Value="1"></Property>
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Run WMI Viewer" />
