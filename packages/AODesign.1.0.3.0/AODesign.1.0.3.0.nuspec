@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AODesign</id>
+    <version>1.0.3.0</version>
+    <title>AODesign</title>
+    <authors>AO-IS</authors>
+    <owners>AO-IS</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AO-IS</description>
+    <dependencies>
+      <dependency id="AOCommon" version="1.0.10.0" />
+      <dependency id="MahApps.Metro" version="0.10.1.1" />
+    </dependencies>
+  </metadata>
+</package>

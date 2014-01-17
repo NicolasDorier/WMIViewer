@@ -1,0 +1,165 @@
+﻿<ao:AOWindow x:Class="WMIViewer.MainWindow"
+        xmlns:ao="http://ao-is.com/Design"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WMIViewer"
+        Title="WMI Viewer" Caption="By AO-IS" MinHeight="560" MinWidth="880" Height="760" Width="1124">
+    <Grid x:Name="root" Margin="10,0,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition  Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="query" IsReadOnly="True">
+                <TextBox.Text>
+                    <PriorityBinding>
+                        <Binding Path="Classes.Selected.Instances.Selected.Properties.Selected.Query"></Binding>
+                        <Binding Path="Classes.Selected.Instances.Selected.Query"></Binding>
+                        <Binding Path="Classes.Selected.Query"></Binding>
+                    </PriorityBinding>
+                </TextBox.Text>
+            </TextBox>
+            <Button Grid.Column="1" ToolTip="Run in powershell" Click="RunPowershell">
+                <Image Source="pack://application:,,,/WMIViewer;component/Images/Windows_PowerShell_icon.png" Height="18" Width="18" Stretch="UniformToFill"></Image>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Classes"
+                      local:GridViewSort.SearchBox="{Binding ElementName=ClassFilter}"
+                      Grid.Column="0">
+                <local:CommandBindingExtensions.ViewModelCommandBindings>
+                    <local:ViewModelCommandBindings>
+                        <local:ViewModelCommandBinding ViewModel="{Binding Refresh}"
+                                                   Command="{x:Static NavigationCommands.Refresh}"  ></local:ViewModelCommandBinding>
+                    </local:ViewModelCommandBindings>
+                </local:CommandBindingExtensions.ViewModelCommandBindings>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:Name="ClassFilter"></TextBox>
+                    <ListView 
+                local:GridViewSort.AutoSort="True"
+                local:GridViewSort.SortBy="ManagementClass.Name"
+                        local:GridViewSort.AutoFilter="{Binding ElementName=ClassFilter, Path=Text}"
+                        local:GridViewSort.FilterMemberPath="ManagementClass.Name"
+                        Grid.Row="1"
+                    BorderThickness="0"
+            ItemsSource="{Binding Classes}" SelectedItem="{Binding Classes.Selected, Mode=TwoWay}" DisplayMemberPath="ManagementClass.Name">
+                    </ListView>
+                    <Button Grid.Column="2"
+                            Command="{x:Static NavigationCommands.Refresh}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-30,-6,0">
+                        <Image Source="pack://application:,,,/WMIViewer;component/Images/112_RefreshArrow_Green_32x32_72.png" Height="18" Width="18" Stretch="UniformToFill"></Image>
+                    </Button>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Instances"
+                      local:GridViewSort.SearchBox="{Binding ElementName=InstanceFilter}"
+                      Grid.Column="1">
+                <local:CommandBindingExtensions.ViewModelCommandBindings>
+                    <local:ViewModelCommandBindings>
+                        <local:ViewModelCommandBinding ViewModel="{Binding Classes.Selected.Refresh}"
+                                                   Command="{x:Static NavigationCommands.Refresh}"  ></local:ViewModelCommandBinding>
+                    </local:ViewModelCommandBindings>
+                </local:CommandBindingExtensions.ViewModelCommandBindings>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:Name="InstanceFilter"></TextBox>
+                    <ListView
+                        Grid.Row="1"
+            ItemsSource="{Binding Classes.Selected.Instances}" 
+                local:GridViewSort.AutoFilter="{Binding ElementName=InstanceFilter, Path=Text}"
+                local:GridViewSort.FilterMemberPath="ManagementObject.InstancePath"
+                BorderThickness="0"
+                SelectedItem="{Binding Classes.Selected.Instances.Selected,Mode=TwoWay}"
+                DisplayMemberPath="ManagementObject.InstancePath"
+                >
+                    </ListView>
+                    <Button Grid.Column="2"
+                            Command="{x:Static NavigationCommands.Refresh}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-30,-6,0">
+                        <Image Source="pack://application:,,,/WMIViewer;component/Images/112_RefreshArrow_Green_32x32_72.png" Height="18" Width="18" Stretch="UniformToFill"></Image>
+                    </Button>
+                </Grid>
+            </GroupBox>
+
+
+            <GroupBox Header="Properties"
+                      local:GridViewSort.SearchBox="{Binding ElementName=PropertyFilter}"
+                      Grid.Column="2">
+                <local:CommandBindingExtensions.ViewModelCommandBindings>
+                    <local:ViewModelCommandBindings>
+                        <local:ViewModelCommandBinding ViewModel="{Binding Classes.Selected.Instances.Selected.Refresh}"
+                                                   Command="{x:Static NavigationCommands.Refresh}"  ></local:ViewModelCommandBinding>
+                    </local:ViewModelCommandBindings>
+                </local:CommandBindingExtensions.ViewModelCommandBindings>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:Name="PropertyFilter"></TextBox>
+                    <ListView
+                        Grid.Row="1"
+                BorderThickness="0"
+                local:GridViewSort.AutoFilter="{Binding ElementName=PropertyFilter, Path=Text}"
+                local:GridViewSort.FilterMemberPath="Name"
+            ItemsSource="{Binding Classes.Selected.Instances.Selected.Properties}"
+                        SelectedItem="{Binding Classes.Selected.Instances.Selected.Properties.Selected, Mode=TwoWay}"
+                        >
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Visibility="{Binding IsKey,Converter={StaticResource FalseToHidden}}" Source="pack://application:,,,/WMIViewer;component/Images/Key.png" Width="24" Height="24" Stretch="UniformToFill"></Image>
+                                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Value" Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Value}" ToolTip="{Binding Value}"></TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Grid.Column="2"
+                            Command="{x:Static NavigationCommands.Refresh}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-30,-6,0">
+                        <Image Source="pack://application:,,,/WMIViewer;component/Images/112_RefreshArrow_Green_32x32_72.png" Height="18" Width="18" Stretch="UniformToFill"></Image>
+                    </Button>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Rectangle Margin="-10,0,-10,0"  Grid.Row="2" VerticalAlignment="Top" Height="1" Fill="LightGray" ></Rectangle>
+        <local:CommandView Grid.Row="2"  ViewModel="{Binding CurrentCommand}"  VerticalAlignment="Bottom"></local:CommandView>
+    </Grid>
+</ao:AOWindow>
