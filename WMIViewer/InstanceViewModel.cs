@@ -113,6 +113,8 @@ namespace WMIViewer
 			ManagementObject = data;
 		}
 
+		
+
 		public class RefreshCommand : CommandViewModel<ManagementObjectData>
 		{
 			InstanceViewModel _Parent;
@@ -127,6 +129,11 @@ namespace WMIViewer
 				{
 					_Parent.ManagementObject = Execution.Result;
 				}
+			}
+
+			protected override bool CanExecuteCore(object parameter)
+			{
+				return !_Parent.ManagementObject.IsClass;
 			}
 
 			protected override Task<ManagementObjectData> StartExecutionCore(object parameter)
