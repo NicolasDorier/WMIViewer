@@ -56,12 +56,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AOCommon.1.0.10.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="NicolasDorier, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NicolasDorier, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NicolasDorier.1.0.2.0\lib\net45\NicolasDorier.dll</HintPath>
+      <HintPath>..\packages\NicolasDorier.1.0.3.0\lib\net45\NicolasDorier.dll</HintPath>
     </Reference>
-    <Reference Include="NicolasDorier.Reactive">
-      <HintPath>..\packages\NicolasDorier.Reactive.1.0.0.0\lib\net45\NicolasDorier.Reactive.dll</HintPath>
+    <Reference Include="NicolasDorier.Reactive, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NicolasDorier.Reactive.1.0.3.0\lib\net45\NicolasDorier.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="NicolasDorier.WPF">
+      <HintPath>..\packages\NicolasDorier.WPF.1.0.1.0\lib\net45\NicolasDorier.WPF.dll</HintPath>
     </Reference>
     <Reference Include="RazorEngine">
       <HintPath>..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
@@ -69,17 +73,24 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\Net45\System.Reactive.Core.dll</HintPath>
+    <Reference Include="System.Reactive.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Core.2.2.2\lib\net45\System.Reactive.Core.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\packages\Rx-Interfaces.2.1.30214.0\lib\Net45\System.Reactive.Interfaces.dll</HintPath>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Interfaces.2.2.2\lib\net45\System.Reactive.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\packages\Rx-Linq.2.1.30214.0\lib\Net45\System.Reactive.Linq.dll</HintPath>
+    <Reference Include="System.Reactive.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-Linq.2.2.2\lib\net45\System.Reactive.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.PlatformServices">
-      <HintPath>..\packages\Rx-PlatformServices.2.1.30214.0\lib\Net45\System.Reactive.PlatformServices.dll</HintPath>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx-PlatformServices.2.2.2\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading">
+      <HintPath>..\packages\Rx-XAML.2.2.2\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -110,14 +121,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CommandBindingExtensions.cs" />
     <Compile Include="CommandView.xaml.cs">
       <DependentUpon>CommandView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GridViewSort.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ManagementPropertyViewModel.cs" />
-    <Compile Include="SelectableObservableCollection.cs" />
     <Compile Include="VisibilityConverter.cs" />
     <Compile Include="WrapperCommandViewModel.cs" />
     <Page Include="CommandView.xaml">
@@ -169,10 +177,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="LICENCE-LGPL.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bins\WpfAnimatedGif.dll" />
+    <Resource Include="LICENCE-LGPL.txt" />
     <Resource Include="IaaS.ico" />
     <Resource Include="Images\IaaS.png" />
     <Resource Include="Images\IaaS.ico" />
