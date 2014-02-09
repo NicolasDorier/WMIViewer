@@ -51,7 +51,14 @@ namespace WMIViewer
 				}
 				return builder.ToString();
 			}
-			return (string)Convert.ChangeType(v, typeof(string));
+			try
+			{
+				return (string)Convert.ChangeType(v, typeof(string));
+			}
+			catch(InvalidCastException)
+			{
+				return v.GetType() + " was not convertible to string";
+			}
 		}
 
 

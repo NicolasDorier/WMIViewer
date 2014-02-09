@@ -140,6 +140,10 @@ namespace WMIViewer
 				{
 					_ManagementClass = value;
 					Query = "Get-WmiObject \"" + value.Name + "\"";
+					if(_Parent.Namespaces.Selected != "CIMV2")
+					{
+						Query += " -Namespace root\\" + _Parent.Namespaces.Selected;
+					}
 					OnPropertyChanged(() => this.ManagementClass);
 				}
 			}

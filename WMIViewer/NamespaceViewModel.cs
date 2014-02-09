@@ -17,23 +17,82 @@ namespace WMIViewer
 	{
 		public NamespaceViewModel()
 		{
-			Namespace = "\\\\localhost\\root\\cimv2";
 			Bus.Commmands.ItemChanged()
 						 .Where(i => i.Added)
 						 .Subscribe(c =>
 						 {
 							 CurrentCommand = new WrapperCommandViewModel(c.Item);
 						 });
-			Classes.ItemPropertyChanged(o=>o.Selected)
+			Classes.ItemPropertyChanged(o => o.Selected)
 				   .Subscribe(c =>
 				   {
 					   if(c.NewValue != null)
 						   c.NewValue.Refresh.Execute();
 				   });
-			Refresh.Execute();
+			Namespaces.ItemPropertyChanged(o => o.Selected)
+					  .Subscribe(o => Namespace = "\\\\localhost\\root\\" + o.NewValue);
+			Namespaces.Selected = "CIMV2";
+			new RefreshNamespaceCommand(this).Execute();
 		}
 
-	
+		public class RefreshNamespaceCommand : CommandViewModel<List<string>>
+		{
+			private NamespaceViewModel namespaceViewModel;
+
+			public RefreshNamespaceCommand(NamespaceViewModel namespaceViewModel)
+				: base(new CommandBusViewModel())
+			{
+				this.namespaceViewModel = namespaceViewModel;
+			}
+			protected override Task<List<string>> StartExecutionCore(object parameter)
+			{
+				return new Task<List<string>>(() =>
+				{
+					List<string> names = new List<string>();
+					ManagementScope ms = new ManagementScope();
+
+					//Provides a wrapper for building paths to WMI objects
+					ManagementPath path = new ManagementPath("\\\\localhost\\root");
+					ms.Path = path;
+					ms.Connect();
+
+					ObjectQuery wql = new ObjectQuery("select * from __Namespace");
+					ManagementObjectSearcher searcher =
+						new ManagementObjectSearcher(ms, wql);
+					ManagementObjectCollection oc = searcher.Get();
+
+					foreach(var result in oc)
+					{
+						names.Add((string)result["Name"]);
+					}
+					return names;
+				});
+			}
+
+			protected override void UpdateModelCore()
+			{
+				if(!Execution.IsFaulted && Execution.Result != null)
+				{
+					CollectionExtensions.Synchronize(
+						namespaceViewModel.Namespaces,
+						Execution.Result,
+						o => o,
+						o => o,
+						o => o);
+				}
+			}
+		}
+
+		private SelectableObservableCollection<string> _Namespaces = new SelectableObservableCollection<string>();
+		public SelectableObservableCollection<string> Namespaces
+		{
+			get
+			{
+				return _Namespaces;
+			}
+		}
+
+
 		private WrapperCommandViewModel _CurrentCommand;
 		public WrapperCommandViewModel CurrentCommand
 		{
@@ -138,6 +197,8 @@ namespace WMIViewer
 				if(value != _Namespace)
 				{
 					_Namespace = value;
+					Classes.Clear();
+					Refresh.Execute();
 					OnPropertyChanged(() => this.Namespace);
 				}
 			}

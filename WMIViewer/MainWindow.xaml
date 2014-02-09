@@ -14,10 +14,15 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="query" IsReadOnly="True">
+            <StackPanel Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Namespace</Label>
+                <ComboBox Margin="10,0,10,0" Width="150" ItemsSource="{Binding Namespaces}" SelectedItem="{Binding Namespaces.Selected, Mode=TwoWay}"></ComboBox>
+            </StackPanel>
+            <TextBox x:Name="query" Grid.Column="1" IsReadOnly="True">
                 <TextBox.Text>
                     <PriorityBinding>
                         <Binding Path="Classes.Selected.Instances.Selected.Properties.Selected.Query"></Binding>
@@ -26,7 +31,7 @@
                     </PriorityBinding>
                 </TextBox.Text>
             </TextBox>
-            <Button Grid.Column="1" ToolTip="Run in powershell" Click="RunPowershell">
+            <Button Grid.Column="2" ToolTip="Run in powershell" Click="RunPowershell">
                 <Image Source="pack://application:,,,/WMIViewer;component/Images/Windows_PowerShell_icon.png" Height="18" Width="18" Stretch="UniformToFill"></Image>
             </Button>
         </Grid>

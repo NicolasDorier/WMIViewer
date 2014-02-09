@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -61,6 +62,10 @@ namespace Build
 			}
 			var blob = container.GetBlockBlobReference(BlobName);
 			blob.UploadFromFile(File, System.IO.FileMode.Open);
+			blob.Properties.CacheControl = "no-cache";
+			blob.Properties.ContentType = "application/octet-stream";
+			blob.Properties.ContentDisposition = "attachment; filename=\""+ Path.GetFileName(File) +"\"";
+			blob.SetProperties();
 			return true;
 		}
 	}
