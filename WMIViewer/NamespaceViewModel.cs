@@ -46,39 +46,63 @@ namespace WMIViewer
 			}
 			protected override Task<List<string>> StartExecutionCore(object parameter)
 			{
+				namespaceViewModel.Namespaces.Clear();
 				return new Task<List<string>>(() =>
 				{
-					List<string> names = new List<string>();
-					ManagementScope ms = new ManagementScope();
+					//List<string> names = new List<string>();
 
-					//Provides a wrapper for building paths to WMI objects
-					ManagementPath path = new ManagementPath("\\\\localhost\\root");
-					ms.Path = path;
-					ms.Connect();
-
-					ObjectQuery wql = new ObjectQuery("select * from __Namespace");
-					ManagementObjectSearcher searcher =
-						new ManagementObjectSearcher(ms, wql);
-					ManagementObjectCollection oc = searcher.Get();
-
-					foreach(var result in oc)
-					{
-						names.Add((string)result["Name"]);
-					}
-					return names;
+					EnumerateNamespace("");
+					//return names;
+					return null;
 				});
+			}
+
+			private void EnumerateNamespace(string ns)
+			{
+				ManagementScope ms = new ManagementScope();
+
+				//Provides a wrapper for building paths to WMI objects
+				ManagementPath path = new ManagementPath("\\\\localhost\\root" + (string.IsNullOrEmpty(ns) ? "" : "\\" + ns));
+				ms.Path = path;
+				ms.Connect();
+
+				ObjectQuery wql = new ObjectQuery("select * from __Namespace");
+				ManagementObjectSearcher searcher =
+					new ManagementObjectSearcher(ms, wql);
+				ManagementObjectCollection oc = searcher.Get();
+
+				foreach(var result in oc)
+				{
+					var name = GetFullName(result);
+
+					OnDispatcher(() =>
+					{
+						namespaceViewModel.Namespaces.Add((string)name);
+					});
+				}
+				foreach(var result in oc)
+				{
+					var name = GetFullName(result);
+					EnumerateNamespace(name);
+				}
+			}
+
+			private string GetFullName(ManagementBaseObject result)
+			{
+				var name = result["Name"];
+				return (result.ClassPath.NamespacePath + "\\" + name).Replace("root\\", "").Replace("ROOT\\", "");
 			}
 
 			protected override void UpdateModelCore()
 			{
 				if(!Execution.IsFaulted && Execution.Result != null)
 				{
-					CollectionExtensions.Synchronize(
-						namespaceViewModel.Namespaces,
-						Execution.Result,
-						o => o,
-						o => o,
-						o => o);
+					//CollectionExtensions.Synchronize(
+					//	namespaceViewModel.Namespaces,
+					//	Execution.Result,
+					//	o => o,
+					//	o => o,
+					//	o => o);
 				}
 			}
 		}
